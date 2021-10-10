@@ -32,9 +32,9 @@ void loop() {
  // put your main code here, to run repeatedly:
     user=server.available();
     if(user ==1){
-      String req=user.readStringUntil('\n');
+      String req=user.readStringUntil('\n'); //Gets a client that is connected to the server and has data available for reading
       Serial.println(req);
-      req.trim();
+      req.trim(); // to trim garbage value 
 
       if(req=="GET /on HTTP/1.1"){
         digitalWrite(led,true);
