@@ -8,10 +8,10 @@
 
 DHT dht(dht_pin,dhttype); // give parameter to the dht sensor
 
-long mychannelnum=1532593;
-char myAPI[]="JTPV47LDNWQ86BP7";
+long mychannelnum=1532593; // thingspeak channel number
+char myAPI[]="JTPV47LDNWQ86BP7";// thingspeak read api key 
 
-WiFiClient user;
+WiFiClient user; 
 
 const char ssid[]="MI ME";
 const char pass[]="ghghghgh";
@@ -43,6 +43,6 @@ void loop() {
   Serial.println( temp);
   delay(100);
 
-  ThingSpeak.writeField(mychannelnum,1,hum,myAPI);
-  ThingSpeak.writeField(mychannelnum,2,temp,myAPI);
+  ThingSpeak.writeField(mychannelnum,1,hum,myAPI); // to upload humidity readings to field 1 
+  ThingSpeak.writeField(mychannelnum,2,temp,myAPI); //to upload temperature readings to field 2
 }
