@@ -98,13 +98,13 @@ static bool config_load_blnkopt()
   return true;
 }
 
-#include <Preferences.h>
-Preferences preferences;
+#include <EEPROM.h>
+#define EEPROM_CONFIG_START 0
 
 void config_load()
 {
   memset(&configStore, 0, sizeof(configStore));
-  preferences.getBytes("config", &configStore, sizeof(configStore));
+  EEPROM.get(EEPROM_CONFIG_START, configStore);
   if (configStore.magic != configDefault.magic) {
     DEBUG_PRINT("Using default config.");
     configStore = configDefault;
@@ -114,14 +114,15 @@ void config_load()
 
 bool config_save()
 {
-  preferences.putBytes("config", &configStore, sizeof(configStore));
+  EEPROM.put(EEPROM_CONFIG_START, configStore);
+  EEPROM.commit();
   DEBUG_PRINT("Configuration stored to flash");
   return true;
 }
 
 bool config_init()
 {
-  preferences.begin("blynk", false);
+  EEPROM.begin(sizeof(ConfigStore));
   config_load();
   return true;
 }
@@ -131,7 +132,6 @@ void enterResetConfig()
   DEBUG_PRINT("Resetting configuration!");
   configStore = configDefault;
   config_save();
-  eraseMcuConfig();
   BlynkState::set(MODE_WAIT_CONFIG);
 }
 

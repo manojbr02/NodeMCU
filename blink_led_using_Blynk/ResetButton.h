@@ -7,6 +7,7 @@ void button_action(void)
   BlynkState::set(MODE_RESET_CONFIG);
 }
 
+ICACHE_RAM_ATTR
 void button_change(void)
 {
 #if BOARD_BUTTON_ACTIVE_LOW
@@ -36,7 +37,7 @@ void button_init()
 #if BOARD_BUTTON_ACTIVE_LOW
   pinMode(BOARD_BUTTON_PIN, INPUT_PULLUP);
 #else
-  pinMode(BOARD_BUTTON_PIN, INPUT_PULLDOWN);
+  pinMode(BOARD_BUTTON_PIN, INPUT);
 #endif
   attachInterrupt(BOARD_BUTTON_PIN, button_change, CHANGE);
 }

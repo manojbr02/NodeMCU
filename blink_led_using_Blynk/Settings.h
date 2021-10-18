@@ -3,48 +3,33 @@
  * Board configuration (see examples below).
  */
 
-#if defined(USE_WROVER_BOARD)
+#if defined(USE_NODE_MCU_BOARD) || defined(USE_WEMOS_D1_MINI)
 
-  #define BOARD_BUTTON_PIN            15
-  #define BOARD_BUTTON_ACTIVE_LOW     true
-
-  #define BOARD_LED_PIN_R             0
-  #define BOARD_LED_PIN_G             2
-  #define BOARD_LED_PIN_B             4
-  #define BOARD_LED_INVERSE           false
-  #define BOARD_LED_BRIGHTNESS        128
-
-#elif defined(USE_TTGO_T7)
-
-  // This board does not have a built-in button
-  // Connect a button to gpio0 <> GND
   #define BOARD_BUTTON_PIN            0
   #define BOARD_BUTTON_ACTIVE_LOW     true
 
-  #define BOARD_LED_PIN               19
-  #define BOARD_LED_INVERSE           false
+  #define BOARD_LED_PIN               2
+  #define BOARD_LED_INVERSE           true
+  #define BOARD_LED_BRIGHTNESS        255
+
+#elif defined(USE_SPARKFUN_BLYNK_BOARD)
+
+  #define BOARD_BUTTON_PIN            0
+  #define BOARD_BUTTON_ACTIVE_LOW     true
+
+  #define BOARD_LED_PIN_WS2812        4
   #define BOARD_LED_BRIGHTNESS        64
 
-#elif defined(USE_ESP32C3_DEV_MODULE)
+#elif defined(USE_WITTY_CLOUD_BOARD)
 
-  #define BOARD_BUTTON_PIN            9
+  #define BOARD_BUTTON_PIN            4
   #define BOARD_BUTTON_ACTIVE_LOW     true
 
-  #define BOARD_LED_PIN_WS2812        8
+  #define BOARD_LED_PIN_R             15
+  #define BOARD_LED_PIN_G             12
+  #define BOARD_LED_PIN_B             13
   #define BOARD_LED_INVERSE           false
-  #define BOARD_LED_BRIGHTNESS        32
-
-  // TODO: remove, workaround for undefined reference to `esp32_adc2gpio'
-  #undef  analogInputToDigitalPin
-
-#elif defined(USE_ESP32S2_DEV_KIT)
-
-  #define BOARD_BUTTON_PIN            0
-  #define BOARD_BUTTON_ACTIVE_LOW     true
-
-  #define BOARD_LED_PIN               19
-  #define BOARD_LED_INVERSE           false
-  #define BOARD_LED_BRIGHTNESS        128
+  #define BOARD_LED_BRIGHTNESS        64
 
 #else
 
@@ -73,27 +58,21 @@
 
 #define BOARD_PWM_MAX                 1023
 
-#define BOARD_LEDC_CHANNEL_1     1
-#define BOARD_LEDC_CHANNEL_2     2
-#define BOARD_LEDC_CHANNEL_3     3
-#define BOARD_LEDC_TIMER_BITS    10
-#define BOARD_LEDC_BASE_FREQ     12000
-
 #define CONFIG_AP_URL                 "blynk.setup"
 #define CONFIG_DEFAULT_SERVER         "blynk.cloud"
 #define CONFIG_DEFAULT_PORT           443
 
 #define WIFI_NET_CONNECT_TIMEOUT      30000
-#define WIFI_CLOUD_CONNECT_TIMEOUT    30000
+#define WIFI_CLOUD_CONNECT_TIMEOUT    60000
 #define WIFI_AP_IP                    IPAddress(192, 168, 4, 1)
 #define WIFI_AP_Subnet                IPAddress(255, 255, 255, 0)
 //#define WIFI_CAPTIVE_PORTAL_ENABLE
 
-//#define USE_TICKER
+#define USE_TICKER
 //#define USE_TIMER_ONE
 //#define USE_TIMER_THREE
 //#define USE_TIMER_FIVE
-#define USE_PTHREAD
+//#define USE_PTHREAD
 
 #define BLYNK_NO_DEFAULT_BANNER
 

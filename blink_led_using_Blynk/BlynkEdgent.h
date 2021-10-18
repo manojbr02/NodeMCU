@@ -1,12 +1,12 @@
 
 extern "C" {
+  #include "user_interface.h"
+
   void app_loop();
-  void eraseMcuConfig();
-  void restartMCU();
 }
 
 #include "Settings.h"
-#include <BlynkSimpleEsp32_SSL.h>
+#include <BlynkSimpleEsp8266_SSL.h>
 
 #ifndef BLYNK_NEW_LIBRARY
 #error "Old version of Blynk library is in use. Please replace it with the new one."
@@ -46,9 +46,14 @@ void printDeviceBanner()
   }
   DEBUG_PRINT(String("Device:   ") + BLYNK_INFO_DEVICE + " @ " + ESP.getCpuFreqMHz() + "MHz");
   DEBUG_PRINT(String("MAC:      ") + WiFi.macAddress());
-  DEBUG_PRINT(String("Flash:    ") + ESP.getFlashChipSize() / 1024 + "K");
-  DEBUG_PRINT(String("ESP sdk:  ") + ESP.getSdkVersion());
-  DEBUG_PRINT(String("Chip rev: ") + ESP.getChipRevision());
+  DEBUG_PRINT(String("Flash:    ") + ESP.getFlashChipRealSize() / 1024 + "K");
+  String coreVer = ESP.getCoreVersion();
+  coreVer.replace("_", ".");
+  DEBUG_PRINT(String("ESP core: ") + coreVer);
+  DEBUG_PRINT(String("ESP SDK:  ") + ESP.getSdkVersion());
+  DEBUG_PRINT(String("Boot Ver: ") + ESP.getBootVersion());
+  DEBUG_PRINT(String("Boot Mode:") + ESP.getBootMode());
+  DEBUG_PRINT(String("FW info:  ") + ESP.getSketchSize() + "/" + ESP.getFreeSketchSpace() + ", MD5:" + ESP.getSketchMD5());
   DEBUG_PRINT(String("Free mem: ") + ESP.getFreeHeap());
   DEBUG_PRINT("--------------------------");
 }
@@ -71,9 +76,6 @@ class Edgent {
 public:
   void begin()
   {
-    WiFi.persistent(false);
-    WiFi.enableSTA(true); // Needed to get MAC
-
     indicator_init();
     button_init();
     config_init();
