@@ -1,16 +1,19 @@
 #include<ESP8266WiFi.h>
+#include<PulseSensorPlayground.h>
 #include<DHT.h>
 #include<ThingSpeak,h>
 
 WiFiClient user;
 
+PulseSensorPlayground pulse;
 DHT dht(dhtpin,dhttype);
+
 
 #define dhtpin D0
 #define dhttype DHT11
 
 #define tempPin D1
-
+#define pulsePin 0 //connected to analog pin A0
 #define ssid "reme"
 #define pass "ghghghgh"
 
@@ -31,13 +34,14 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   PinMode(tempPin,INPUT);
+  pulse.analogRead(pulsePin);
   dht.begin();
   ThingSpeak.begin(user);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  float tempVal=analogRead(tempPin);
+  float tempVal=analogInput(tempPin);
   float totaltemp=(val_temp/1024.0)*5000;
   float cel=totaltemp/10;
   Serial.print("temp:");
@@ -48,7 +52,12 @@ void loop() {
   Serial.println("Room Humidity :" +(String)h);
   Serial.println("Room Temperature :" +(String)t);
 
+  int bpm=pulse.getBeatsPerMinute();
+  Serial.print("BPM:");
+  Serial.println(bpm);
+  
   ThingSpeak.writeField(mychannelnum,1,tempVal,myAPI);
   ThingSpeak.writeField(mychannelnum,2,h,myAPI);
   ThingSpeak.writeField(mychannelnum,3,t,myAPI);
+  ThingSpeak.writeField(mychannelnum,4,bpm,myAPI);
 }
